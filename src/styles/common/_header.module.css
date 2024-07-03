@@ -1,0 +1,18 @@
+.header_container {
+    height: 30px;
+    width: 100%;
+    /* background-color: #E9E9E9; */
+    border-bottom: 1px solid #C5D4EB;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+}
+
+.image_button {
+    width: 40px;
+    height: 40px;
+    filter: opacity(0.4) drop-shadow(0 0 0  #414E5A);
+    margin: 30px 10px 10px;
+    cursor: pointer;
+}
