@@ -1,0 +1,31 @@
+.selection_container {
+    /* flex: 1; */
+    height: 100%;
+    width: 100%;
+    /* background-color: whitesmoke; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    position: relative;
+    padding: 5px;
+    /* border-radius: 20px; */
+    /* border: solid red; */
+    /* border-bottom: 3px solid red; */
+    /* margin: 5px; */
+    /* background-color: red; */
+}
+
+.selection_text{
+    width: 100%;
+    font-size: 20px;
+    font-family: 'GmarketSansMedium';
+    font-weight: 500;
+    /* margin: 7px; */
+    color: black;
+    white-space: pre-wrap;
+    text-align: center;
+    border: solid lightgray;
+    padding: 5px;
+    /* background-color: red; */
+}

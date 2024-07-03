@@ -8,10 +8,7 @@ export default function Storybox({title, sub_title, img, description, id}) {
     const router = useRouter();
 
     const handleClick = () => {
-        router.push({
-        pathname: '/detail/' + id,
-        query: { title, sub_title, img, description }
-        });
+        window.location.href = `/detail/${id}`
     };
 
     return (

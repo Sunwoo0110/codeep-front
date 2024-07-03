@@ -1,0 +1,28 @@
+.detailbox_container {
+    /* flex: 1; */
+    /* height: 100%; */
+    width: 100%;
+    /* background-color: whitesmoke; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    position: relative;
+    padding: 5px;
+    /* border-radius: 20px; */
+    /* border: solid red; */
+    /* border-bottom: 3px solid red; */
+    margin: 5px;
+    cursor: pointer;
+}
+
+.detailbox_text {
+    font-size: 20px;
+    font-family: 'GmarketSansMedium';
+    font-weight: 500;
+    margin: 7px;
+    color: black;
+    white-space: pre-wrap;
+    text-align: center;
+    /* background-color: red; */
+}

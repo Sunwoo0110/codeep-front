@@ -15,7 +15,7 @@ export default function Story() {
     const [sub_title, setSubTitle] = useState("살의는 커피의 향기");
     const [description, setDescription] = useState("testtesttesttesttesttesttesttest\ntestsetest\ntestestsetes");
     const [img, setImg] = useState("/images/conan.png");
-    const [id, setId] = useState(1);
+    const [storyId, setStoryId] = useState(1);
 
     const start = async () => {   
         // console.log(name + " " + password);
@@ -50,8 +50,8 @@ export default function Story() {
                     {maintitle}
                 </div>
                 <div className={styles.story_list}>
-                    <Storybox title={title} sub_title={sub_title} img={img} description={description} id={id}/>
-                    <Storybox title={title} sub_title={sub_title} img={img} description={description} id={id}/>
+                    <Storybox title={title} sub_title={sub_title} img={img} description={description} storyId={storyId}/>
+                    <Storybox title={title} sub_title={sub_title} img={img} description={description} storyId={storyId}/>
                 </div>
             </div>
         </div>
