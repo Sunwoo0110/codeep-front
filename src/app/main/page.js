@@ -36,6 +36,7 @@ export default function Main() {
         // } else {
         //     alert("로그인에 실패하였습니다.")
         // }
+        window.location.href = "/story"
     }
 
     return (

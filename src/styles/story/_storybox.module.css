@@ -1,0 +1,95 @@
+.storybox_container {
+    height: 30%;
+    width: 100%;
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    position: relative;
+    padding: 5px;
+    border-radius: 20px;
+    border: 1px solid lightgray;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.storybox_top {
+    height: 100%;
+    width: 100%;
+    /* background-color: green; */
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    align-items: center;
+    position: relative;
+    padding: 5px;
+    border-bottom: 1px solid lightgray;
+}
+
+.storybox_right {
+    height: 100%;
+    width: 100%;
+    /* background-color: purple; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: left;
+    position: relative;
+    padding: 5px;
+}
+
+.storybox_bottom {
+    height: 100%;
+    width: 100%;
+    /* background-color: yellow; */
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    position: relative;
+    padding: 5px;
+
+}
+
+.storybox_img {
+    height: 100px;
+    width: 100px;
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    position: relative;
+    margin: 2px;
+    border-radius: 5px;
+}
+
+.storybox_title {
+    font-size: 30px;
+    font-family: 'GmarketSansMedium';
+    font-weight: 700;
+    margin: 7px;
+    color: #003B85;
+    white-space: pre-wrap;
+    text-align: left;
+}
+
+.storybox_subtitle {
+    font-size: 20px;
+    font-family: 'GmarketSansMedium';
+    font-weight: 500;
+    margin: 7px;
+    color: #003B85;
+    white-space: pre-wrap;
+    text-align: left;
+}
+
+.storybox_description {
+    font-size: 15px;
+    font-family: 'GmarketSansMedium';
+    font-weight: 500;
+    margin: 5px;
+    color: #003B85;
+    white-space: pre-wrap;
+    text-align: center;
+}
