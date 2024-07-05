@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 export default function Storybox({title, sub_title, img, description, storyId, episodeId}) {
 
     const handleClick = () => {
-        window.location.href = `/detail/${storyId}/${episodeId}`
+        window.location.href = `/detail/${storyId}/1`
     };
 
     return (

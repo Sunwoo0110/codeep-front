@@ -7,37 +7,44 @@ import { usePathname, useRouter } from 'next/navigation';
 import styles from "@/styles/detail/Detail.module.css"
 import Header from "@/app/_components/common/_header";
 import Detailbox from "@/app/_components/detail/_detailbox";
-import Selection from "@/app/_components/detail/_selection";
+// import Selection from "@/app/_components/detail/_selection";
 import Titlebox from "@/app/_components/detail/_titlebox";
 import Evidence from "@/app/_components/detail/_evidence";
 
 export default function Detail() {
 
+    const router = useRouter();
+
     const pathname = usePathname();
     const storyId = pathname.split("/")[2];
-    const episodeId = pathname.split("/")[3];
+    const episodeOrder = pathname.split("/")[3];
 
     const detailBoxRef = useRef(null);
     const [activeIndex, setActiveIndex] = useState(0);
 
     const [detailId, setDetailId] = useState(1);
     const [detailList, setDetailList] = useState([
-        {id: 1, text: "111111Heiji was on his way to the warehouse, following a tip he received about suspicious activities. The old building stood eerily silent as he approached it. His heart pounded with a mix of fear and determination. He knew Kazuha was in danger, and every second counted. As he pushed open the creaky door, he heard faint sounds coming from deep inside the warehouse."},
-        {id: 2, text: "222222Heiji was on his way to the warehouse, following a tip he received about suspicious activities. The old building stood eerily silent as he approached it. His heart pounded with a mix of fear and determination. He knew Kazuha was in danger, and every second counted. As he pushed open the creaky door, he heard faint sounds coming from deep inside the warehouse."},
-        {id: 3, text: "333333Heiji was on his way to the warehouse, following a tip he received about suspicious activities. The old building stood eerily silent as he approached it. His heart pounded with a mix of fear and determination. He knew Kazuha was in danger, and every second counted. As he pushed open the creaky door, he heard faint sounds coming from deep inside the warehouse."},
-        {id: 4, text: "444444Heiji was on his way to the warehouse, following a tip he received about suspicious activities. The old building stood eerily silent as he approached it. His heart pounded with a mix of fear and determination. He knew Kazuha was in danger, and every second counted. As he pushed open the creaky door, he heard faint sounds coming from deep inside the warehouse."},
+        // {id: 1, text: "111111Heiji was on his way to the warehouse, following a tip he received about suspicious activities. The old building stood eerily silent as he approached it. His heart pounded with a mix of fear and determination. He knew Kazuha was in danger, and every second counted. As he pushed open the creaky door, he heard faint sounds coming from deep inside the warehouse."},
+        // {id: 2, text: "222222Heiji was on his way to the warehouse, following a tip he received about suspicious activities. The old building stood eerily silent as he approached it. His heart pounded with a mix of fear and determination. He knew Kazuha was in danger, and every second counted. As he pushed open the creaky door, he heard faint sounds coming from deep inside the warehouse."},
+        // {id: 3, text: "333333Heiji was on his way to the warehouse, following a tip he received about suspicious activities. The old building stood eerily silent as he approached it. His heart pounded with a mix of fear and determination. He knew Kazuha was in danger, and every second counted. As he pushed open the creaky door, he heard faint sounds coming from deep inside the warehouse."},
+        // {id: 4, text: "444444Heiji was on his way to the warehouse, following a tip he received about suspicious activities. The old building stood eerily silent as he approached it. His heart pounded with a mix of fear and determination. He knew Kazuha was in danger, and every second counted. As he pushed open the creaky door, he heard faint sounds coming from deep inside the warehouse."},
     ]); // 계속 추가
 
-    const [episodeList, setEpisodeList] = useState([]);
-    const [currentEpisode, setCurrentEpisode] = useState(-1);
-    const [currentEpisodeTitle, setCurrentEpisodeTitle] = useState("");
+    const [episodeId, setEpisodeId] = useState(1);
+    const [episodeInfo, setEpisodeInfo] = useState({});
+    const [clueNum, setClueNum] = useState(0);
     const [title, setTitle] = useState("");
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [evidenceId, setEvidenceId] = useState(1);
-    const [isSelection, setIsSelection] = useState(false);
-    const [isLastEpisode, setIsLastEpisode] = useState(false);
-    const [isLastDetail, setIsLastDetail] = useState(false);
+    // const [episodeList, setEpisodeList] = useState([]);
+    // const [currentEpisode, setCurrentEpisode] = useState(-1);
+    // const [currentEpisodeTitle, setCurrentEpisodeTitle] = useState("");
+    // const [title, setTitle] = useState("");
+
+    // const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [evidenceId, setEvidenceId] = useState(1);
+    // const [isSelection, setIsSelection] = useState(false);
+    // const [isLastEpisode, setIsLastEpisode] = useState(false);
+    // const [isLastDetail, setIsLastDetail] = useState(false);
 
     const handleSelectionClick = (selection) => {
         setEvidenceId(selection.evidence);
@@ -54,30 +61,28 @@ export default function Detail() {
     }
 
     const goNextEpsiode = () => {
+        const nextEpisodeOrder = parseInt(episodeOrder) + 1;
 
+        if (clueNum === 0) {
+            window.location.href = `/detail/${storyId}/${nextEpisodeOrder}`;
+        } else {
+            window.location.href = `/detail/${storyId}/${episodeOrder}/clue`;
+        }
     }
 
     useEffect(() => {
         const getEpisode = async () => {
-            // console.log(storyId);
-            // console.log(window.localStorage.getItem("userAge"));
-            const res = await axios.post('http://localhost:8000/episodes/get_episodes', {
+            const res = await axios.post('http://localhost:8000/episodes/episode_order', {
                 story_id: storyId,
-                age: window.localStorage.getItem("userAge")
+                level: window.localStorage.getItem("userLevel"),
+                order: episodeOrder
             });
     
             if (res.data.result === "success"){
-                // console.log(res.data.episodes);
-                await setEpisodeList(res.data.episodes);
-                // console.log(episodeList);
-                // console.log(episodeId);
-                // console.log(res.data.episodes.findIndex(episode => episode._id === episodeId));
-                await setCurrentEpisode(res.data.episodes[res.data.episodes.findIndex(episode => episode._id === episodeId)].order);
-                await setCurrentEpisodeTitle(res.data.episodes[res.data.episodes.findIndex(episode => episode._id === episodeId)].title);
-                if (res.data.episodes[res.data.episodes.findIndex(episode => episode._id === episodeId)].order - 1 === res.data.episodes.length) {
-                    await setIsLastEpisode(true);
-                }
-                await setTitle(`Episode ${res.data.episodes[res.data.episodes.findIndex(episode => episode._id === episodeId)].order}: ${res.data.episodes[res.data.episodes.findIndex(episode => episode._id === episodeId)].title}`);
+                await setTitle(res.data.episodes.title);
+                await setEpisodeId(res.data.episodes._id);
+                await setEpisodeInfo(res.data.episodes);
+                await setClueNum(res.data.episodes.num_of_clues);
             } else {
                 alert("에피소드 불러오기에 실패하였습니다.")
             }
@@ -86,13 +91,12 @@ export default function Detail() {
     }, [])
 
     useEffect(() => {
-        console.log(episodeId);
-        console.log(window.localStorage.getItem("userId"))
+        // console.log(episodeId);
+        // console.log(window.localStorage.getItem("userId"))
         const getDetail = async () => {
             try {
-                const res = await axios.post('http://localhost:8000/details/get_detail', {
+                const res = await axios.post('http://localhost:8000/details/get_all_detail', {
                     episode_id: episodeId,
-                    user_id: window.localStorage.getItem("userId")
                 });
         
                 if (res.data.result === "success"){
@@ -108,7 +112,7 @@ export default function Detail() {
             }
         }
         getDetail();
-    }, [currentEpisode]);
+    }, [episodeId]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -140,19 +144,26 @@ export default function Detail() {
     return(
         <div className={styles.container}>
             <Header />
-            <Titlebox title={title}/>
+            <Titlebox title={`Episode ${episodeOrder}: ${title}`}/>
             <div className={styles.detail_container}>
                 <div className={styles.detail_top} ref={detailBoxRef}>
                     {
                         detailList.map((detail, index) => (
                             <div className={`${styles.detail_box} ${index === activeIndex ? 'active' : ''}`} key={index}>
-                                <Detailbox key={index} detailId={detail.id} detailText={detail.text}/>
+                                <Detailbox key={index} detailId={detail._id} detailText={detail.content}/>
                             </div>
                         ))
                     }
                 </div>
                 <div className={styles.detail_bottom}>
-                    {isSelection ? (
+                    <div className={styles.selection_container}>
+                        <div className={styles.selection_text} onClick={goNextEpsiode}>
+                            Next
+                        </div>
+                    </div>
+                </div>
+                {/* <div className={styles.detail_bottom}> */}
+                    {/* {isSelection ? (
                         <Selection detailId={detailList[activeIndex].id} onSelect={handleSelectionClick}/>
                     ) : (
                         isLastEpisode ? (
@@ -176,12 +187,12 @@ export default function Detail() {
                                 </div>
                             ))
                         )
-                    }  
-                </div>
+                    }   */}
+                {/* </div> */}
             </div>
-            {isModalOpen && (
+            {/* {isModalOpen && (
                 <Evidence evidenceId={evidenceId} onClose={handleCloseModal}/>
-            )}
+            )} */}
         </div>
     )
 

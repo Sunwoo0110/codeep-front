@@ -21,7 +21,7 @@
 }
 
 .detail_top {
-    height: 65%;
+    height: 75%;
     width: 100%;
     /* background-color: green; */
     display: flex;
@@ -62,7 +62,8 @@
     align-items: center;
     /* background-color: #DFE9F5; */
     scroll-snap-align: start;
-    border: 2px solid lightgray;
+    border: solid lightgray;
+    border-width: 2px 0px 2px 0px;
     margin: 10px 0px;
 }
 
@@ -93,14 +94,14 @@
     width: 100%;
     font-size: 20px;
     font-family: 'GmarketSansMedium';
-    font-weight: 700;
+    font-weight: 500;
     /* margin: 7px; */
     color: black;
     white-space: pre-wrap;
-    text-align: center;
+    text-align: right;
     border: solid lightgray;
-    border-width: 0px 0px 1px 0px;
-    padding: 10px;
+    padding: 5px;
+    cursor: pointer;
     /* margin: 5px; */
     /* background-color: red; */
     /* background-color: #DFE9F5; */
