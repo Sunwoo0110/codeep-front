@@ -61,10 +61,13 @@ export default function Detail() {
     }
 
     const goNextEpsiode = () => {
-        const nextEpisodeOrder = parseInt(episodeOrder) + 1;
 
         if (clueNum === 0) {
-            window.location.href = `/detail/${storyId}/${nextEpisodeOrder}`;
+            if (parseInt(episodeOrder) === parseInt(episodeInfo.num_of_episodes) - 1) {
+                window.location.href = `/detail/${storyId}/${parseInt(episodeOrder)}/reasoning`;
+            } else {
+                window.location.href = `/detail/${storyId}/${parseInt(episodeOrder)+1}`;
+            } 
         } else {
             window.location.href = `/detail/${storyId}/${episodeOrder}/clue`;
         }

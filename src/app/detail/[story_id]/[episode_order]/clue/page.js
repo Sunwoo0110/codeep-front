@@ -124,16 +124,22 @@ export default function Clue() {
     }
 
     const nextClick = () => {
-        window.location.href = `/detail/${storyId}/${parseInt(episodeOrder)+1}`;
+        console.log(episodeOrder);
+        console.log(episodeInfo.num_of_episodes);
+        if (parseInt(episodeOrder) === parseInt(episodeInfo.num_of_episodes) - 1) {
+            window.location.href = `/detail/${storyId}/${parseInt(episodeOrder)}/reasoning`;
+        } else {
+            window.location.href = `/detail/${storyId}/${parseInt(episodeOrder)+1}`;
+        } 
     }
 
     useEffect(() => {
         
         if (currentClueNum > clueNum) {
             setIsLastClue(true);
+            setSubTitle('모든 증거 수집이 완료되었습니다.');
         }
 
-        setSubTitle('모든 증거 수집이 완료되었습니다.');
     }, [collectedClueList, currentClueNum])
 
     return (

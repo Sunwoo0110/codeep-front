@@ -106,6 +106,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     /* background-color: #DFE9F5; */
     scroll-snap-align: start;
     border: solid lightgray;
@@ -133,8 +134,9 @@
     align-items: center;
     /* background-color: #DFE9F5; */
     border: solid lightgray;
-    border-width: 2px 0px 2px 0px;
-    margin: 10px 0px;
+    border-width: 1px 0px 1px 0px;
+    margin: 10px 0px 0px 00px;
+    padding: 10px 0px 0px;
 }
 
 .collected_clue_text {
@@ -147,9 +149,9 @@
     white-space: pre-wrap;
     text-align: center;
     border: solid lightgray;
-    border-width: 0px 0px 1px 0px;
-    padding: 10px;
-    /* margin: 5px; */
+    border-width: 0px ;
+    /* padding: 10px; */
+    margin: 5px;
     /* background-color: red; */
     /* background-color: #DFE9F5; */
 }
@@ -162,6 +164,6 @@
     /* justify-content: center; */
     align-items: center;
     position: relative;
-    margin: 2px;
+    /* margin: 2px; */
     border-radius: 5px;
 }
