@@ -41,7 +41,7 @@
 
 .reasoning_textbox {
     width: 90%;
-    height: 25%;
+    height: 20%;
     border-radius: 20px;
     margin: 10px;
     background-color: #DFE9F5;
@@ -89,7 +89,7 @@
 }
 
 .reasoning_context_container {
-    height: 80%;
+    height: 70%;
     width: inherit;
     margin: 0px;
     display: flex;

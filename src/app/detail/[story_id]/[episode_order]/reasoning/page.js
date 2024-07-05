@@ -2,7 +2,7 @@
 
 import styles from "../../../../../styles/detail/Reasoning.module.css";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { usePathname, useRouter } from 'next/navigation';
 import Header from "../../../../_components/common/_header";
 import Leftchat from "../../../../_components/detail/_leftchat";
@@ -27,6 +27,7 @@ export default function Reasoning() {
     const pathname = usePathname();
     const storyId = pathname.split("/")[2];
     const episodeOrder = pathname.split("/")[3];
+    const chatContainerRef = useRef(null);
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
@@ -56,6 +57,18 @@ export default function Reasoning() {
         window.location.href = `/detail/${storyId}/${parseInt(episodeOrder)+1}`
     }
 
+    useEffect(() => {
+        if (parseInt(episodeOrder) === order) {
+            window.localStorage.removeItem("collectedClueList");
+        }
+    }, []);
+
+    useEffect(() => {
+        if (chatContainerRef.current) {
+            chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        }
+    }, [chats]);
+
 
     return (
         <div className={styles.container}>
@@ -72,7 +85,8 @@ export default function Reasoning() {
                     ) : null
                 }
                 
-                <div id="chatting" className={styles.reasoning_context_container}>
+                <div id="chatting" className={styles.reasoning_context_container}
+                ref={chatContainerRef}>
                     {chats.map((chat, index) => (
                         chat.name === "Conan" ?
                         <Leftchat key={index} name={chat.name} content={chat.content} /> :

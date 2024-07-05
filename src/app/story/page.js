@@ -16,9 +16,9 @@ export default function Story() {
     const [selectedOption, setSelectedOption] = useState('');
 
     const options = [
-        { level: 1, text: '초급: 설명 추가' },
-        { level: 2, text: '중급: 설명 추가' },
-        { level: 3, text: '고급: 설명 추가' },
+        { level: 1, text: '초급' },
+        { level: 2, text: '중급' },
+        { level: 3, text: '고급' },
     ];
 
     const handleOptionChange = (event) => {
@@ -45,6 +45,7 @@ export default function Story() {
             }
         }
         getStory();
+        window.localStorage.removeItem("collectedClueList");
     }, [])
 
     return (
