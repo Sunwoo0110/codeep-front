@@ -10,37 +10,42 @@ import Storybox from "../_components/story/_storybox";
 export default function Story() {
 
     const [maintitle, setMainTitle] = useState('원하는 추리 소설을 선택하세요!');
-    
-    const [title, setTitle] = useState("명탐정 코난");
-    const [sub_title, setSubTitle] = useState("살의는 커피의 향기");
-    const [description, setDescription] = useState("testtesttesttesttesttesttesttest\ntestsetest\ntestestsetes");
-    const [img, setImg] = useState("/images/conan.png");
-    const [storyId, setStoryId] = useState(1);
+    const [subtitle, setSubTitle] = useState('난이도에 맞추어 생성해드립니다');
+    const [storyList, setStoryList] = useState([]);
 
-    const start = async () => {   
-        // console.log(name + " " + password);
-        // console.log(password);
-        // const res = await axios.post("http://localhost:3000/api/login", {
-        //     body: {
-        //         name: name,
-        //         password: password
-        //     }
-        // })
+    const [selectedOption, setSelectedOption] = useState('');
 
-        // if (res.data.message === "success"){
-        //     window.localStorage.removeItem("userName");
-        //     window.localStorage.removeItem("userId");
-        //     window.localStorage.setItem("userName", name);
-        //     window.localStorage.setItem("userId", res.data.data);
+    const options = [
+        { level: 1, text: '초급: 설명 추가' },
+        { level: 2, text: '중급: 설명 추가' },
+        { level: 3, text: '고급: 설명 추가' },
+    ];
 
-        //     console.log(window.localStorage.getItem("userName"));
-        //     console.log(window.localStorage.getItem("userId"));
-        //     window.location.href = "/friends"
-        // } else {
-        //     alert("로그인에 실패하였습니다.")
-        // }
-        window.location.href = "/story"
+    const handleOptionChange = (event) => {
+        const selectedOption = options.find(option => option.text === event.target.value);
+        setSelectedOption(selectedOption);
+        handleOptionSelect(selectedOption);
+    };
+
+    const handleOptionSelect = (option) => {
+        window.localStorage.removeItem("userLevel");
+        window.localStorage.setItem("userLevel", option.level);
     }
+
+    useEffect(() => {
+        const getStory = async () => {   
+            const res = await axios.get(`http://localhost:8000/stories/info/${window.localStorage.getItem("userAge")}`)
+    
+            if (res.data.result === "success"){
+                console.log(res.data.stories);
+                await setStoryList(res.data.stories);
+                console.log(storyList);
+            } else {
+                alert("스토리 불러오기에 실패하였습니다.")
+            }
+        }
+        getStory();
+    }, [])
 
     return (
         <div className={styles.container}>
@@ -49,9 +54,31 @@ export default function Story() {
                 <div className={styles.story_title}>
                     {maintitle}
                 </div>
+                <div className={styles.sub_title}>
+                    {subtitle}
+                </div>
+                <select className={styles.main_input}
+                    value={selectedOption.level || ''}
+                    onChange={handleOptionChange}>
+                    <option value="" disabled>난이도를 선택하세요</option>
+                            {options.map((option) => (
+                                <option key={option.id} value={option.id}>
+                                    {option.text}
+                                </option>
+                            ))}
+                </select>
                 <div className={styles.story_list}>
-                    <Storybox title={title} sub_title={sub_title} img={img} description={description} storyId={storyId}/>
-                    <Storybox title={title} sub_title={sub_title} img={img} description={description} storyId={storyId}/>
+                    {storyList.map((story, index) => (
+                        <Storybox 
+                            key={index}
+                            title={story.title}
+                            sub_title={story.subtitle}
+                            description={story.description}
+                            img="/images/conan/story.png"
+                            storyId={story._id}
+                            episodeId={story.first_ep[0]._id}
+                        />
+                    ))}
                 </div>
             </div>
         </div>

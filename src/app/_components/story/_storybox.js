@@ -3,12 +3,10 @@
 import styles from "../../../styles/story/_storybox.module.css"
 import { usePathname, useRouter } from 'next/navigation';
 
-export default function Storybox({title, sub_title, img, description, id}) {
-
-    const router = useRouter();
+export default function Storybox({title, sub_title, img, description, storyId, episodeId}) {
 
     const handleClick = () => {
-        window.location.href = `/detail/${id}`
+        window.location.href = `/detail/${storyId}/${episodeId}`
     };
 
     return (

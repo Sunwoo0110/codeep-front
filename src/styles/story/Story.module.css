@@ -16,7 +16,7 @@
     align-items: center;
     position: relative;
     padding: 10px;
-    margin-top: 30px;
+    /* margin-top: 30px; */
 }
 
 .story_list {
@@ -35,8 +35,33 @@
     font-size: 25px;
     font-family: 'GmarketSansMedium';
     font-weight: 700;
-    margin: 25px;
+    margin: 30px 10px 0px 0px;
     color: #003B85;
     white-space: pre-wrap;
     text-align: center;
+}
+
+.main_input {
+    /* height: 50px; */
+    width: 70%;
+    margin: 5px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 15px;
+    color: #3A1D1D;
+    font-family: 'GmarketSansMedium';
+    font-weight: 500;
+    text-align: center;
+    background-color: white;
+}
+
+.sub_title {
+    font-size: 15px;
+    margin: 15px;
+    color: #808080;
+    white-space: pre-wrap;
+    text-align: center;
+    font-family: 'GmarketSansMedium';
+    font-weight: 500;
 }

@@ -1,0 +1,25 @@
+.titlebox_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* margin: 5px; */
+    padding: 5px;
+    width: 100%;
+    margin-top: 30px;
+    background-color: whitesmoke;
+}
+
+.titlebox_text {
+    width: 100%;
+    font-size: 20px;
+    font-family: 'GmarketSansMedium';
+    font-weight: 700;
+    color: black;
+    white-space: pre-wrap;
+    text-align: center;
+    border: solid lightgray;
+    border-width: 0px 0px 1px 0px;
+    padding: 10px;
+    margin: 5px;
+}

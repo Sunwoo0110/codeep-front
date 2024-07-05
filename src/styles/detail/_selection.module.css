@@ -9,6 +9,7 @@
     align-items: center;
     position: relative;
     padding: 5px;
+    margin: 5px;
     /* border-radius: 20px; */
     /* border: solid red; */
     /* border-bottom: 3px solid red; */
@@ -20,12 +21,15 @@
     width: 100%;
     font-size: 20px;
     font-family: 'GmarketSansMedium';
-    font-weight: 500;
+    font-weight: 700;
     /* margin: 7px; */
     color: black;
     white-space: pre-wrap;
     text-align: center;
     border: solid lightgray;
-    padding: 5px;
+    border-width: 0px 0px 1px 0px;
+    padding: 10px;
+    /* margin: 5px; */
     /* background-color: red; */
+    /* background-color: #DFE9F5; */
 }

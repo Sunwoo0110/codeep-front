@@ -7,37 +7,52 @@ import Header from "../_components/common/_header";
 
 export default function Main() {
 
-    const [maintitle, setMainTitle] = useState('\n제목');
-    const [subtitle, setSubTitle] = useState('부연 설명');
+    const [maintitle, setMainTitle] = useState('\n알씨\nRead Clue');
+    const [subtitle, setSubTitle] = useState('GPT 기반 추리형 영어 독해 학습 서비스');
     const [startButton, setStartButton] = useState('추리 시작하기');
     
     const [name, setName] = useState("");
     const [age, setAge] = useState(0);  
+    const [userId, setUserId] = useState(0);
 
     const start = async () => {   
-        // console.log(name + " " + password);
-        // console.log(password);
-        // const res = await axios.post("http://localhost:3000/api/login", {
-        //     body: {
-        //         name: name,
-        //         password: password
-        //     }
-        // })
 
-        // if (res.data.message === "success"){
-        //     window.localStorage.removeItem("userName");
-        //     window.localStorage.removeItem("userId");
-        //     window.localStorage.setItem("userName", name);
-        //     window.localStorage.setItem("userId", res.data.data);
+        console.log(name);
+        console.log(parseInt(age));
 
-        //     console.log(window.localStorage.getItem("userName"));
-        //     console.log(window.localStorage.getItem("userId"));
-        //     window.location.href = "/friends"
-        // } else {
-        //     alert("로그인에 실패하였습니다.")
-        // }
-        window.location.href = "/story"
+        console.log(typeof(name));
+        console.log(typeof(parseInt(age)));
+
+        const res = await axios.post("http://127.0.0.1:8000/users/register", {
+                name: name,
+                age: parseInt(age, 10), 
+            }
+        )
+
+        if (res.data.result === "success"){
+            setUserId(res.data.user._id);
+            window.localStorage.removeItem("userName");
+            window.localStorage.removeItem("userId");
+            window.localStorage.removeItem("userAge");
+            window.localStorage.setItem("userName", name);
+            window.localStorage.setItem("userId", userId);
+            window.localStorage.setItem("userAge", age);
+
+            // console.log(window.localStorage.getItem("userName"));
+            // console.log(window.localStorage.getItem("userId"));
+            window.location.href = "/story"
+        } else {
+            alert("로그인에 실패하였습니다.")
+        }
     }
+
+    useEffect(() => {
+        window.localStorage.setItem("userName", name);
+        window.localStorage.setItem("userId", userId);
+
+        console.log(window.localStorage.getItem("userName"));
+        console.log(window.localStorage.getItem("userId"));
+    }, [userId])
 
     return (
         <div className={styles.container}>
