@@ -10,10 +10,12 @@ export default function Clue() {
 
     const [maintitle, setMainTitle] = useState('에피소드에서 단서들을 발견해보세요!');
     const [subtitle, setSubTitle] = useState('');
-    const [hintTitle, setHintTitle] = useState('');
+    const [hintTitle, setHintTitle] = useState(window.localStorage.getItem("hintTitle") ? window.localStorage.getItem("hintTitle") : '');
+    const [orderTitle, setOrderTitle] = useState('');
     const [clueButton, setClueButton] = useState('단서 확인하기');
     const [nextButton, setNextButton] = useState('다음 에피소드로 이동하기');
     const [isLastClue, setIsLastClue] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(false);
     
     const [episodeId, setEpisodeId] = useState(1);
     const [episodeInfo, setEpisodeInfo] = useState({});
@@ -29,15 +31,23 @@ export default function Clue() {
 
     const [clueNum, setClueNum] = useState(10);
     const [clueInput, setClueInput] = useState('');
-    const [currentClueNum, setCurrentClueNum] = useState(1);
-    const [clueTry, setClueTry] = useState(1);
-    const [collectedClueList, setCollectedClueList] = useState([])
+    const [currentClueNum, setCurrentClueNum] = useState(window.localStorage.getItem("currentClueNum") ? parseInt(window.localStorage.getItem("currentClueNum")) : 1);
+    const [clueTry, setClueTry] = useState(window.localStorage.getItem("clueTry") ? parseInt(window.localStorage.getItem("clueTry")) : 1);
+    const [collectedClueList, setCollectedClueList] = useState(window.localStorage.getItem("collectedClueList") ? JSON.parse(window.localStorage.getItem("collectedClueList")) : []);
 
     const pathname = usePathname();
     const storyId = pathname.split("/")[2];
     const episodeOrder = pathname.split("/")[3];
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            clueClick();
+        } 
+    };
+
     useEffect(() => {
+
         const getEpisode = async () => {
             const res = await axios.post('http://localhost:8000/episodes/episode_order', {
                 story_id: storyId,
@@ -71,7 +81,7 @@ export default function Clue() {
                     // console.log(res.data.details);
                     console.log(res.data);
                     await setDetailList(res.data.details);
-                    await setCollectedClueList
+                    // await setCollectedClueList(res.data.clues);
                     // console.log(detailList);
                 } else {
                     // alert("디테일 불러오기에 실패하였습니다.")
@@ -83,8 +93,21 @@ export default function Clue() {
         getDetail();
     }, [episodeId]);
 
+    useEffect(() => {
+        window.localStorage.setItem("collectedClueList", JSON.stringify(collectedClueList));
+        window.localStorage.setItem("currentClueNum", currentClueNum);
+        window.localStorage.setItem("clueTry", clueTry);
+        window.localStorage.setItem("hintTitle", hintTitle);
+
+    }, [clueTry])
+
+    useEffect(() => {
+        if (currentClueNum <= clueNum) {
+            setOrderTitle(`${currentClueNum}번째 단서를 입력해주세요.`);
+        }
+    }, [currentClueNum])
+
     const clueClick = async () => {
-        // console.log(episodeId);
         const res = await axios.post('http://localhost:8000/clues/check_clue', {
             episode_id: episodeId,
             name: clueInput,
@@ -93,17 +116,19 @@ export default function Clue() {
         });
 
         if (res.data.result === "success"){
-            setCollectedClueList([...collectedClueList, res.data.clue]);
+            setCollectedClueList([res.data.clue, ...collectedClueList]);
             setCurrentClueNum(currentClueNum + 1);
             // 한번에 성공
-            if (currentClueNum === clueNum) {
+            if (currentClueNum-1 === clueNum) {
                 setHintTitle("축하합니다! 모든 단서를 찾으셨습니다.\n 다음 에피소드로 이동합니다.");
+                
                 // window.location.href = `/detail/${storyId}/${episodeOrder+1}`;
             }
             // 다음 단서
             else {
                 // 단서 리스트에 추가
                 setClueTry(1);
+                setHintTitle(`단서 발견에 성공하셨습니다!`);
             }
         }
         else if (res.data.result === "wrong") {
@@ -116,16 +141,31 @@ export default function Clue() {
                 setHintTitle(`단서 발견에 실패하셨습니다.\n정답: ${res.data.clue.name}\n`);
                 setCurrentClueNum(currentClueNum + 1);
                 setClueTry(1);
-                setCollectedClueList([...collectedClueList, res.data.clue]);
+                setCollectedClueList([res.data.clue, ...collectedClueList]);
             }
         }
 
         setClueInput('')
     }
 
+    const handleTimer = (order) => {
+        console.log(order);
+        if (order < clueNum) {
+            setTimeout(() => {
+                setHintTitle(`${order}번째 단서를 입력해주세요.`);
+            }, 1000)
+        }
+    }
+
     const nextClick = () => {
         console.log(episodeOrder);
         console.log(episodeInfo.num_of_episodes);
+
+        // window.localStorage.removeItem("collectedClueList");
+        window.localStorage.removeItem("currentClueNum");
+        window.localStorage.removeItem("clueTry");
+        window.localStorage.removeItem("hintTitle");
+
         if (parseInt(episodeOrder) === parseInt(episodeInfo.num_of_episodes) - 1) {
             window.location.href = `/detail/${storyId}/${parseInt(episodeOrder)}/reasoning`;
         } else {
@@ -138,9 +178,9 @@ export default function Clue() {
         if (currentClueNum > clueNum) {
             setIsLastClue(true);
             setSubTitle('모든 증거 수집이 완료되었습니다.');
-        }
-
-    }, [collectedClueList, currentClueNum])
+            setIsDisabled(true);    
+        } 
+    }, [collectedClueList])
 
     return (
         <div className={styles.container}>
@@ -159,13 +199,18 @@ export default function Clue() {
                 <div className={styles.sub_title}>
                     {subtitle}
                 </div>
-                <div className={styles.hint_title}>
-                    {hintTitle}
+                <div className={styles.order_title}>
+                    {orderTitle}
                 </div>
                 <input className={styles.clue_input} placeholder="단서를 입력하세요" value={clueInput}
+                onKeyPress={handleKeyPress}
+                disabled={isDisabled}
                 onChange={(e) => {
                     setClueInput(e.target.value)
                 }}/>
+                <div className={styles.hint_title}>
+                    {hintTitle}
+                </div>
                 <div className={styles.clue_button} onClick={clueClick}>
                     {clueButton}
                 </div>
@@ -177,7 +222,7 @@ export default function Clue() {
                     <div className={styles.collected_clue_container}>
                         {collectedClueList.map((clue, index) => (
                             <div key={index} className={styles.collected_clue_box}>
-                                <img src="/images/conan/story.png" className={styles.collected_clue_img} />
+                                <img src={clue.img} className={styles.collected_clue_img} />
                                 <div className={styles.collected_clue_text}>{clue.name}</div>
                             </div>
                         ))}

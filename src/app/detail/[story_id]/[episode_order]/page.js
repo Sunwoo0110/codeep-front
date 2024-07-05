@@ -9,7 +9,8 @@ import Header from "@/app/_components/common/_header";
 import Detailbox from "@/app/_components/detail/_detailbox";
 // import Selection from "@/app/_components/detail/_selection";
 import Titlebox from "@/app/_components/detail/_titlebox";
-import Evidence from "@/app/_components/detail/_evidence";
+import Episodebox from "@/app/_components/detail/_episodebox";
+// import Evidence from "@/app/_components/detail/_evidence";
 
 export default function Detail() {
 
@@ -19,8 +20,8 @@ export default function Detail() {
     const storyId = pathname.split("/")[2];
     const episodeOrder = pathname.split("/")[3];
 
-    const detailBoxRef = useRef(null);
-    const [activeIndex, setActiveIndex] = useState(0);
+    const detailBoxRef = useRef([]);
+    const [currentDetailIndex, setCurrentDetailIndex] = useState(1);
 
     const [detailId, setDetailId] = useState(1);
     const [detailList, setDetailList] = useState([
@@ -35,29 +36,19 @@ export default function Detail() {
     const [clueNum, setClueNum] = useState(0);
     const [title, setTitle] = useState("");
 
-    // const [episodeList, setEpisodeList] = useState([]);
-    // const [currentEpisode, setCurrentEpisode] = useState(-1);
-    // const [currentEpisodeTitle, setCurrentEpisodeTitle] = useState("");
-    // const [title, setTitle] = useState("");
-
-    // const [isModalOpen, setIsModalOpen] = useState(false);
-    // const [evidenceId, setEvidenceId] = useState(1);
-    // const [isSelection, setIsSelection] = useState(false);
-    // const [isLastEpisode, setIsLastEpisode] = useState(false);
-    // const [isLastDetail, setIsLastDetail] = useState(false);
-
-    const handleSelectionClick = (selection) => {
-        setEvidenceId(selection.evidence);
-        setIsModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-        setEvidenceId(0);
-    };
+    const [isLastEpisode, setIsLastEpisode] = useState(false);
+    const [isAtBottom, setIsAtBottom] = useState(false);
+    const containerRef = useRef(null);
 
     const goNextDetail = () => {
+        console.log(currentDetailIndex);
+        if (currentDetailIndex < detailList.length+1) {
+            setCurrentDetailIndex(currentDetailIndex + 1);
 
+            if (detailBoxRef.current[currentDetailIndex]) {
+                detailBoxRef.current[currentDetailIndex].scrollIntoView({ behavior: 'smooth' });
+            }
+        }
     }
 
     const goNextEpsiode = () => {
@@ -72,6 +63,26 @@ export default function Detail() {
             window.location.href = `/detail/${storyId}/${episodeOrder}/clue`;
         }
     }
+    
+    useEffect(() => {
+        const handleScroll = () => {
+            if (containerRef.current) {
+                const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+                setIsAtBottom(scrollTop + clientHeight + (scrollHeight / (2*(detailList.length+1))) >= scrollHeight);
+            }
+        };
+    
+        const container = containerRef.current;
+        if (container) {
+            container.addEventListener('scroll', handleScroll);
+            return () => container.removeEventListener('scroll', handleScroll);
+        }
+    }, [detailList]);
+
+
+    useEffect(() => {
+        detailBoxRef.current = detailBoxRef.current.slice(0, detailList.length);
+    }, [detailList.length]);
 
     useEffect(() => {
         const getEpisode = async () => {
@@ -115,55 +126,51 @@ export default function Detail() {
             }
         }
         getDetail();
-    }, [episodeId]);
 
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollTop = detailBoxRef.current.scrollTop;
-            const sectionHeight = detailBoxRef.current.clientHeight;
-            const index = Math.round(scrollTop / sectionHeight);
-            setActiveIndex(index);
-        };
-    
-        const container = detailBoxRef.current;
-        container.addEventListener('scroll', handleScroll);
-    
-        return () => container.removeEventListener('scroll', handleScroll);
-    }, []);
-
-    useEffect(() => {
-        // if (detailBoxRef.current) {
-        //     detailBoxRef.current.scrollTop = detailBoxRef.current.scrollHeight;
-        // }
-
-        if (detailBoxRef.current) {
-            detailBoxRef.current.scrollTo({
-                top: detailBoxRef.current.scrollHeight,
-                behavior: 'smooth',
-            });
+        if (parseInt(episodeOrder) === parseInt(episodeInfo.num_of_episodes)) {
+            console.log("last episode");
+            setIsLastEpisode(true);
         }
-    }, [detailList]);
+    }, [episodeId]);
 
     return(
         <div className={styles.container}>
             <Header />
             <Titlebox title={`Episode ${episodeOrder}: ${title}`}/>
             <div className={styles.detail_container}>
-                <div className={styles.detail_top} ref={detailBoxRef}>
+                <div className={styles.detail_top} ref={containerRef}>
+                    <div className={styles.detail_episodebox}>
+                        <Episodebox title={title} description={episodeInfo.description} order={episodeOrder} img={episodeInfo.img}/>    
+                    </div>
                     {
                         detailList.map((detail, index) => (
-                            <div className={`${styles.detail_box} ${index === activeIndex ? 'active' : ''}`} key={index}>
-                                <Detailbox key={index} detailId={detail._id} detailText={detail.content}/>
+                            <>
+                            <div className={styles.detail_box} key={index}>
+                                <Detailbox key={index} detailText={detail.content} 
+                                ref={el => (detailBoxRef.current[index] = el)}/>
                             </div>
+                            <div className={styles.detail_order_text}>
+                                {index+1}
+                            </div>
+                            </>
                         ))
                     }
                 </div>
                 <div className={styles.detail_bottom}>
-                    <div className={styles.selection_container}>
-                        <div className={styles.selection_text} onClick={goNextEpsiode}>
-                            Next
-                        </div>
-                    </div>
+                    {
+                        (!isLastEpisode && isAtBottom) && (
+                            <div className={styles.selection_container}>
+                                <div className={styles.selection_text} onClick={goNextEpsiode}>
+                                    Next Episode
+                                </div>
+                            </div>
+                        )
+                    }
+                    {
+                        // currentDetailIndex < detailList.length && (
+                        //     <button onClick={goNextDetail} style={{ padding: '10px 20px', marginTop: '20px' }}>Next</button>
+                        // )
+                    }
                 </div>
                 {/* <div className={styles.detail_bottom}> */}
                     {/* {isSelection ? (

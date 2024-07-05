@@ -40,10 +40,20 @@
     font-weight: 500;
 }
 
-.hint_title {
+.order_title {
     font-size: 15px;
     margin: 10px;
     color: #003B85;
+    white-space: pre-wrap;
+    text-align: center;
+    font-family: 'GmarketSansMedium';
+    font-weight: 700;
+}
+
+.hint_title {
+    font-size: 13px;
+    margin: 10px;
+    color: black;
     white-space: pre-wrap;
     text-align: center;
     font-family: 'GmarketSansMedium';
@@ -83,7 +93,7 @@
 }
 
 .clue_bottom {
-    /* height: 30%; */
+    height: 50%;
     width: 100%;
     /* background-color: green; */
     display: flex;
@@ -92,11 +102,9 @@
     /* justify-content: center;
     align-items: center;
     position: relative; */
-    /* padding: 3px; */
-
+    padding: 5px;
+    overflow-y: hidden;
     /* border-bottom: 1px solid lightgray; */
-    /* overflow-y: auto; */
-    /* scroll-snap-type: y mandatory; */
 }
 
 .collected_clue_container {
@@ -104,14 +112,16 @@
     height: 100%;
     width: 100%;
     display: flex;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     flex-direction: column;
     /* background-color: #DFE9F5; */
-    scroll-snap-align: start;
+    /* scroll-snap-align: start; */
     border: solid lightgray;
     border-width: 2px 0px 2px 0px;
     margin: 10px 0px;
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
 }
 
 .collected_clue_title {
