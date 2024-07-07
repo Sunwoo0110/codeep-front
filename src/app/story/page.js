@@ -13,6 +13,7 @@ export default function Story() {
     const [subtitle, setSubTitle] = useState('난이도에 맞추어 생성해드립니다');
     const [storyList, setStoryList] = useState([]);
 
+    const [name, setName] = useState("");
     const [selectedOption, setSelectedOption] = useState('');
 
     const options = [
@@ -20,6 +21,21 @@ export default function Story() {
         { level: 2, text: '중급' },
         { level: 3, text: '고급' },
     ];
+
+    const register = async () => {
+        const res = await axios.post("http://127.0.0.1:8000/users/register", {
+                name: name,
+                level: selectedOption.level,
+            }
+        )
+
+        if (res.data.result === "success"){
+            window.localStorage.removeItem("userId");
+            window.localStorage.setItem("userId", res.data.user._id);
+        } else {
+            alert("로그인에 실패하였습니다.")
+        }
+    }
 
     const handleOptionChange = (event) => {
         const selectedOption = options.find(option => option.text === event.target.value);
@@ -31,6 +47,26 @@ export default function Story() {
         window.localStorage.removeItem("userLevel");
         window.localStorage.setItem("userLevel", option.level);
     }
+
+    const handleInputChange = (event) => {
+        setName(event.target.value);
+    };
+
+    const handleStoryboxClick = async (storyId) => {
+        if (name.trim() === '' || !selectedOption) {
+            console.log(name);
+            alert('이름과 난이도를 모두 입력하세요');
+            return;
+        }
+
+        else{
+            await register();
+
+            window.localStorage.removeItem("userName");
+            window.localStorage.setItem("userName", name);
+            window.location.href = `/detail/${storyId}/1`
+        }
+    };
 
     useEffect(() => {
         const getStory = async () => {   
@@ -58,6 +94,9 @@ export default function Story() {
                 <div className={styles.sub_title}>
                     {subtitle}
                 </div>
+                <input className={styles.main_input} placeholder="이름을 입력하세요"
+                value={name}
+                onChange={handleInputChange}/>
                 <select className={styles.main_input}
                     value={selectedOption.level || ''}
                     onChange={handleOptionChange}>
@@ -78,6 +117,7 @@ export default function Story() {
                             img="/images/conan/story.png"
                             storyId={story._id}
                             episodeId={story.first_ep[0]._id}
+                            onClick={() => handleStoryboxClick(story._id)}
                         />
                     ))}
                 </div>
