@@ -12,6 +12,10 @@ export default function Header() {
                 <img src="/images/back.png" alt="back" className={styles.image_button} />
             </button>
 
+            <button style={{ backgroundColor: "inherit", border: "none" }} onClick={() => {window.location.href = `/cluelist`;}}>
+                <img src="/images/clue.png" alt="back" className={styles.image_button} />
+            </button>
+
             <button style={{ backgroundColor: "inherit", border: "none" }} onClick={() => window.history.forward()}>
                 <img src="/images/forward.png" alt="forward" className={styles.image_button} />
             </button>

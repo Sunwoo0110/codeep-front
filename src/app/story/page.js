@@ -52,7 +52,7 @@ export default function Story() {
         setName(event.target.value);
     };
 
-    const handleStoryboxClick = async (storyId) => {
+    const handleStoryboxClick = async (storyId, storyTitle) => {
         if (name.trim() === '' || !selectedOption) {
             console.log(name);
             alert('이름과 난이도를 모두 입력하세요');
@@ -64,6 +64,11 @@ export default function Story() {
 
             window.localStorage.removeItem("userName");
             window.localStorage.setItem("userName", name);
+            window.localStorage.removeItem("storyId");
+            window.localStorage.setItem("storyId", storyId);
+            window.localStorage.removeItem("storyTitle");
+            window.localStorage.setItem("storyTitle", storyTitle);
+            
             window.location.href = `/detail/${storyId}/1`
         }
     };
@@ -117,7 +122,7 @@ export default function Story() {
                             img="/images/conan/story.png"
                             storyId={story._id}
                             episodeId={story.first_ep[0]._id}
-                            onClick={() => handleStoryboxClick(story._id)}
+                            onClick={() => handleStoryboxClick(story._id, story.title)}
                         />
                     ))}
                 </div>
