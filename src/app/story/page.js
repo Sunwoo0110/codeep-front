@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 
 import Header from "../_components/common/_header";
 import Storybox from "../_components/story/_storybox";
+import { Stick } from "next/font/google";
 
 export default function Story() {
 
@@ -25,7 +26,6 @@ export default function Story() {
     const register = async () => {
         const res = await axios.post("http://127.0.0.1:8000/users/register", {
                 name: name,
-                level: selectedOption.level,
             }
         )
 
@@ -35,6 +35,24 @@ export default function Story() {
         } else {
             alert("로그인에 실패하였습니다.")
         }
+    }
+
+    const remove = async (storyId) => {
+        await axios.post("http://localhost:8000/chattings/remove_all_chat", {
+            story_id: storyId,
+            name: name,
+            level: selectedOption.level
+        })
+
+        await axios.post("http://localhost:8000/points/remove_point", {
+            story_id: storyId,
+            name: name,
+            level: selectedOption.level
+        })
+
+        window.localStorage.removeItem("currentClueNum");
+        window.localStorage.removeItem("hintTitle");
+        window.localStorage.removeItem("isHint");
     }
 
     const handleOptionChange = (event) => {
@@ -61,6 +79,7 @@ export default function Story() {
 
         else{
             await register();
+            await remove(storyId);
 
             window.localStorage.removeItem("userName");
             window.localStorage.setItem("userName", name);
