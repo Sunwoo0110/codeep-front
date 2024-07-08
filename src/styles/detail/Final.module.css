@@ -31,8 +31,8 @@
     padding: 5px;
     margin: 5px;
     border: 1px solid lightgray;
-    overflow-y: auto;
-    scroll-snap-type: y mandatory;
+    /* overflow-y: auto;
+    scroll-snap-type: y mandatory; */
     border-bottom: 5px solid lightgray;
 }
 

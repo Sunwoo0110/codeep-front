@@ -66,9 +66,9 @@ export default function Final() {
             if (res.data.result === "success"){
                 console.log(res.data.stories);
                 await setStoryList(res.data.stories);
-                console.log(storyList);
+                // console.log(res.data.stories.find(story => story._id !== storyId))
 
-                const nextStory = storyList.find(story => story._id !== storyId)[0];
+                setNextStory(res.data.stories.find(story => story._id !== storyId));
             } else {
                 alert("스토리 불러오기에 실패하였습니다.")
             }
@@ -145,7 +145,7 @@ export default function Final() {
                     <div className={styles.final_text}>
                         {`증거 포인트: ${storyCluePoint}점\n`}
                         {`추리 포인트: ${storyDetectPoint}점\n`}
-                        {`플레이 시간: ${totalDetectTime}\n`}
+                        {`플레이 시간: ${totalDetectTime.split(":")[0]}분 ${totalDetectTime.split(":")[1]}초\n`}
                     </div>
                 </div>
 

@@ -69,9 +69,9 @@ export default function Story() {
     }
 
     const handleOptionChange = (event) => {
-        const selectedOption = options.find(option => option.text === event.target.value);
-        setSelectedOption(selectedOption);
-        handleOptionSelect(selectedOption);
+        const tmp = options.find(option => option.text === event.target.value);
+        setSelectedOption(tmp);
+        handleOptionSelect(tmp);
     };
 
     const handleOptionSelect = (option) => {
@@ -135,11 +135,11 @@ export default function Story() {
                 value={name}
                 onChange={handleInputChange}/>
                 <select className={styles.main_input}
-                    value={selectedOption.level || ''}
+                    value={selectedOption.text || ''}
                     onChange={handleOptionChange}>
                     <option value="" disabled>난이도를 선택하세요</option>
-                            {options.map((option) => (
-                                <option key={option.id} value={option.id}>
+                            {options.map((option, index) => (
+                                <option key={option.text} value={option.text}>
                                     {option.text}
                                 </option>
                             ))}
