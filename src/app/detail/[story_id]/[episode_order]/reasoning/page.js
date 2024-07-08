@@ -18,7 +18,7 @@ export default function Reasoning() {
     const [isLastChat, setIsLastChat] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const [content, setContent] = useState('');
     const [question, setQuestion] = useState('');
@@ -52,7 +52,22 @@ export default function Reasoning() {
         setIsLoading(false); 
     }
 
-    const nextClick = () => {
+    const updateStat = async () => {
+        const is_arrest = (arrestTitle === "범인 검거 성공") ? 1 : 0;
+        const res = await axios.post(`http://localhost:8000/stats/update_stat`, {
+            story_id: storyId,
+            name: userName,
+            level: level,
+            is_arrest: is_arrest
+        });
+
+        if (res.data.result === "success") {
+            console.log("success");
+        }
+    }
+
+    const nextClick = async () => {
+        await updateStat();
         window.location.href = `/detail/${storyId}/${parseInt(episodeOrder)+1}`
     }
 
@@ -94,6 +109,9 @@ export default function Reasoning() {
             setArrestContent(res.data.content);
             setArrestImg("/images/conan/fail.png");
             setIsModalOpen(true);
+
+            window.localStorage.removeItem("isArrest");
+            window.localStorage.setItem("isArrest", false);
             
             setChats(currentChats => [...currentChats, { name: userName, content: input, point: 0}]);
             // setChats(currentChats => [...currentChats, { name: "Conan", content: res.data.content, point: 0}]);
@@ -128,6 +146,9 @@ export default function Reasoning() {
                     setArrestContent(res.data.chatting.content);
                     setArrestImg("/images/conan/success.png");
                     setIsModalOpen(true);
+
+                    window.localStorage.removeItem("isArrest");
+                    window.localStorage.setItem("isArrest", true);
                 }
             }
         }
@@ -151,12 +172,6 @@ export default function Reasoning() {
                 setChats(transformedChats);
                 console.log(transformedChats);
 
-                for (let i = 0; i < transformedChats.length; i++) {
-                    if (transformedChats[i].name === userName) {
-                        console.log(transformedChats[i].point);
-                        // setTotalPoint(currentPoint => currentPoint + transformedChats[i].point);
-                    }
-                }
             } else {
                 if (chats.length === 0) {
                     setIsLoading(true);
@@ -179,7 +194,20 @@ export default function Reasoning() {
 
             }
         }
+
+        const getTotalPoint = async () => {
+            const res = await axios.post(`http://localhost:8000/points/all_detect_point`, {
+                story_id: storyId,
+                name: userName,
+                level: level
+            });
+
+            if (res.data.result === "success") {
+                setTotalPoint(res.data.total_point);
+            }
+        }
         getChats();
+        getTotalPoint();
     }, []);
 
     useEffect(() => {

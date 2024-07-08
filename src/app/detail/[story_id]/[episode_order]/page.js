@@ -40,17 +40,6 @@ export default function Detail() {
     const [isAtBottom, setIsAtBottom] = useState(false);
     const containerRef = useRef(null);
 
-    const goNextDetail = () => {
-        console.log(currentDetailIndex);
-        if (currentDetailIndex < detailList.length+1) {
-            setCurrentDetailIndex(currentDetailIndex + 1);
-
-            if (detailBoxRef.current[currentDetailIndex]) {
-                detailBoxRef.current[currentDetailIndex].scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-    }
-
     const goNextEpsiode = () => {
 
         if (clueNum === 0) {
@@ -62,6 +51,10 @@ export default function Detail() {
         } else {
             window.location.href = `/detail/${storyId}/${episodeOrder}/clue`;
         }
+    }
+
+    const goFinal = () => {
+        window.location.href = `/detail/${storyId}/final`;
     }
     
     useEffect(() => {
@@ -130,6 +123,7 @@ export default function Detail() {
         if (parseInt(episodeOrder) === parseInt(episodeInfo.num_of_episodes)) {
             console.log("last episode");
             setIsLastEpisode(true);
+            
         }
     }, [episodeId]);
 
@@ -167,42 +161,16 @@ export default function Detail() {
                         )
                     }
                     {
-                        // currentDetailIndex < detailList.length && (
-                        //     <button onClick={goNextDetail} style={{ padding: '10px 20px', marginTop: '20px' }}>Next</button>
-                        // )
-                    }
-                </div>
-                {/* <div className={styles.detail_bottom}> */}
-                    {/* {isSelection ? (
-                        <Selection detailId={detailList[activeIndex].id} onSelect={handleSelectionClick}/>
-                    ) : (
-                        isLastEpisode ? (
+                        (isLastEpisode && isAtBottom ) && (
                             <div className={styles.selection_container}>
-                                <div className={styles.selection_text} onClick={() => {}}>
-                                    Final
+                                <div className={styles.selection_text} onClick={goFinal}>
+                                    결과 확인하기
                                 </div>
                             </div>
-                        ) : 
-                            ( isLastDetail ? (
-                                <div className={styles.selection_container}>
-                                    <div className={styles.selection_text} onClick={() => {}}>
-                                        Next Episode
-                                    </div>
-                                </div>
-                            ) : (
-                                <div className={styles.selection_container}>
-                                    <div className={styles.selection_text} onClick={() => {}}>
-                                        Next
-                                    </div>
-                                </div>
-                            ))
                         )
-                    }   */}
-                {/* </div> */}
+                    }
+                </div>
             </div>
-            {/* {isModalOpen && (
-                <Evidence evidenceId={evidenceId} onClose={handleCloseModal}/>
-            )} */}
         </div>
     )
 

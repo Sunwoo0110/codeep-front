@@ -3,7 +3,7 @@
 import styles from "../../../styles/story/_storybox.module.css"
 import { usePathname, useRouter } from 'next/navigation';
 
-export default function Storybox({title, sub_title, img, description, storyId, episodeId, onClick}) {
+export default function Storybox({title, sub_title, img, description, onClick}) {
 
     return (
         <div className={styles.storybox_container} onClick={onClick}>

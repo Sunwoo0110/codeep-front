@@ -37,6 +37,18 @@ export default function Story() {
         }
     }
 
+    const startStats = async () => {
+        const res = await axios.post("http://localhost:8000/stats/ep1_start", {
+            name: name,
+        })
+        if (res.data.result === "success"){
+            // window.localStorage.removeItem("userId");
+            // window.localStorage.setItem("userId", res.data.user._id);
+        } else {
+            alert("시작 스탯 생성에 실패하였습니다.")
+        }
+    }
+
     const remove = async (storyId) => {
         await axios.post("http://localhost:8000/chattings/remove_all_chat", {
             story_id: storyId,
@@ -53,6 +65,7 @@ export default function Story() {
         window.localStorage.removeItem("currentClueNum");
         window.localStorage.removeItem("hintTitle");
         window.localStorage.removeItem("isHint");
+        window.localStorage.removeItem("isArrest");
     }
 
     const handleOptionChange = (event) => {
@@ -79,6 +92,7 @@ export default function Story() {
 
         else{
             await register();
+            await startStats();
             await remove(storyId);
 
             window.localStorage.removeItem("userName");
@@ -105,7 +119,6 @@ export default function Story() {
             }
         }
         getStory();
-        window.localStorage.removeItem("collectedClueList");
     }, [])
 
     return (
@@ -138,9 +151,7 @@ export default function Story() {
                             title={story.title}
                             sub_title={story.subtitle}
                             description={story.description}
-                            img="/images/conan/story.png"
-                            storyId={story._id}
-                            episodeId={story.first_ep[0]._id}
+                            img={story.img}
                             onClick={() => handleStoryboxClick(story._id, story.title)}
                         />
                     ))}

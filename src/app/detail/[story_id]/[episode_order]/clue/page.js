@@ -194,12 +194,12 @@ export default function Clue() {
                 // 점수 감점
                 // 0이 힌트 안쓴거 1이 힌트 2가 정답확인 한거
                 addPoint(2);
-                getClueList();
+                await getClueList();
                 
                 // 유저 수집 단서 추가
                 setCurrentClueNum(currentClueNum + 1);
                 // TODO: 단서 추가
-                if (currentClueNum-1 === clueNum) {
+                if (currentClueNum === clueNum) {
                     setHintTitle("축하합니다! 모든 단서를 찾으셨습니다.\n 다음 에피소드로 이동합니다.");
                 }
                 // 다음 단서
