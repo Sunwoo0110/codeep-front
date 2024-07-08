@@ -7,6 +7,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Header from "../../../../_components/common/_header";
 import Leftchat from "../../../../_components/detail/_leftchat";
 import Rightchat from "../../../../_components/detail/_rightchat";
+import Arrest from "../../../../_components/detail/_arrest";
 
 export default function Reasoning() {
 
@@ -17,12 +18,16 @@ export default function Reasoning() {
     const [isLastChat, setIsLastChat] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(true);
 
     const [content, setContent] = useState('');
     const [question, setQuestion] = useState('');
     const [chats, setChats] = useState([]);
     const [point, setPoint] = useState(0);
     const [totalPoint, setTotalPoint] = useState(0);
+    const [arrestTitle, setArrestTitle] = useState('');
+    const [arrestContent, setArrestContent] = useState('');
+    const [arrestImg, setArrestImg] = useState('');
 
     const pathname = usePathname();
     const storyId = pathname.split("/")[2];
@@ -51,7 +56,16 @@ export default function Reasoning() {
         window.location.href = `/detail/${storyId}/${parseInt(episodeOrder)+1}`
     }
 
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
     const getPoint = async (input) => { 
+
+        if (input === "") {
+            alert("메세지를 입력해주세요.");
+            return 0;
+        }
         
         const res = await axios.post(`http://localhost:8000/points/detect_point`, {
             story_id: storyId,
@@ -75,9 +89,14 @@ export default function Reasoning() {
             // 채팅 끝내기
             setIsLastChat(true);
             setIsDisabled(true);
+
+            setArrestTitle("범인 검거 실패");
+            setArrestContent(res.data.content);
+            setArrestImg("/images/conan/fail.png");
+            setIsModalOpen(true);
             
             setChats(currentChats => [...currentChats, { name: userName, content: input, point: 0}]);
-            setChats(currentChats => [...currentChats, { name: "Conan", content: res.data.content, point: 0}]);
+            // setChats(currentChats => [...currentChats, { name: "Conan", content: res.data.content, point: 0}]);
             
         } else {
             alert("오류가 발생하였습니다.\n다시 시도해주세요.");
@@ -103,12 +122,18 @@ export default function Reasoning() {
                 setChats(currentChats => [...currentChats, { name: "Conan", content: res.data.chatting.content, point: point}]);
                 if (res.data.chatting.is_end === 1){
                     setIsLastChat(true);
+                    setIsDisabled(true);
+
+                    setArrestTitle("범인 검거 성공");
+                    setArrestContent(res.data.chatting.content);
+                    setArrestImg("/images/conan/success.png");
+                    setIsModalOpen(true);
                 }
             }
         }
     }
 
-    useEffect(() => {
+    useEffect( () => {
         const getChats = async () => {
             const res = await axios.post(`http://localhost:8000/chattings/get_all_chat`, {
                 story_id: storyId,
@@ -129,7 +154,7 @@ export default function Reasoning() {
                 for (let i = 0; i < transformedChats.length; i++) {
                     if (transformedChats[i].name === userName) {
                         console.log(transformedChats[i].point);
-                        setTotalPoint(currentPoint => currentPoint + transformedChats[i].point);
+                        // setTotalPoint(currentPoint => currentPoint + transformedChats[i].point);
                     }
                 }
             } else {
@@ -203,11 +228,15 @@ export default function Reasoning() {
                         {isLoading ? (
                             <img src="/images/loading.png" alt="loading" className={styles.reasoning_loading_button} />
                         ) : (
-                            <img src="/images/send.png" alt="send" className={styles.reasoning_image_button} />
+                            <img src="/images/send.png" alt="send" className={styles.reasoning_image_button} 
+                            onClick={sendChat}/>
                         )}
                     </button>
                 </div>
             </div>
+            {isModalOpen && (
+                <Arrest title={arrestTitle} content={arrestContent} point={totalPoint} img={arrestImg} onClose={handleCloseModal}/>
+            )}
         </div>
     )
 }

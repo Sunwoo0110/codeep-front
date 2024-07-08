@@ -1,4 +1,4 @@
-.evidence_container {
+.arrest_container {
     width: 70%;
     /* height: 60%; */
     display: flex;
@@ -13,51 +13,57 @@
     transform: translate(-50%, -50%);
     padding: 5px;
     border-radius: 20px;
+    border: solid lightgray
 }
 
-.evidence_modal_title {
-    font-size: 20px;
+.arrest_modal_title {
+    font-size: 25px;
     font-family: 'GmarketSansMedium';
     font-weight: 700;
-    margin-top: 10px;
+    margin-top: 20px ;
+    margin-bottom: 10px;
     color: #003B85;
     white-space: pre-wrap;
     text-align: center;
 }   
 
-.evidence_title {
-    font-size: 25px;
+.arrest_point{
+    font-size: 15px;
     font-family: 'GmarketSansMedium';
-    font-weight: 700;
+    font-weight: 500;
     margin-top: 10px;
+    margin-bottom: 5px;
     color: black;
     white-space: pre-wrap;
     text-align: center;
 }
 
-.evidence_text {
-    font-size: 20px;
+.arrest_content {
+    font-size: 13px;
+    font-family: 'GmarketSansMedium';
+    font-weight: 500;
+    margin: 7px;
+    color: #5f5f5f;
+    white-space: pre-wrap;
+    text-align: center;
+}
+
+.arrest_button {
+    font-size: 15px;
     font-family: 'GmarketSansMedium';
     font-weight: 500;
     margin: 7px;
     color: black;
     white-space: pre-wrap;
     text-align: center;
+    color: #003B85;
+    background-color: #DFE9F5;
+    border-radius: 10px;
+    padding: 10px 20px;
 }
 
-.evidence_button {
-    font-size: 20px;
-    font-family: 'GmarketSansMedium';
-    font-weight: 500;
-    margin: 7px;
-    color: black;
-    white-space: pre-wrap;
-    text-align: center;
-    background-color: red;
-}
-
-.evidence_img {
-    height: 30%;
+.arrest_img {
+    height: 20%;
     width: 90%;
     display: flex;
     flex-direction: column;
