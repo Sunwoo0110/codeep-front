@@ -15,11 +15,11 @@ export default function Final() {
     const level = parseInt(window.localStorage.getItem("userLevel"));
     const userName = window.localStorage.getItem("userName");
     const storyTitle = window.localStorage.getItem("storyTitle");
-    const isArrest = window.localStorage.getItem("isArrest") === "true" ? true : false;
+    const isArrest =( window.localStorage.getItem("isArrest") === "true") ? true : false;
 
     const [totalCluePoint, setTotalCluePoint] = useState(0);
     const [totalDetectPoint, setTotalDetectPoint] = useState(0);
-    const [totalDetectTime, setTotalDetectTime] = useState(0);
+    const [totalDetectTime, setTotalDetectTime] = useState("00:00");
     const [arrestNum, setArrestNum] = useState(0);
     const [completeNum, setCompleteNum] = useState(0);
 
@@ -140,7 +140,7 @@ export default function Final() {
                         {`${storyTitle} (${(parseInt(level) === 1) ? "초급" : (parseInt(level) === 2) ? "중급" : "고급"})`}
                     </div>
                     <div className={styles.final_arresttitle}>
-                        {`${(isArrest === "true") ? "범인 검거 성공" : "범인 검거 실패"}`}
+                        {`${(isArrest === true) ? "범인 검거 성공" : "범인 검거 실패"}`}
                     </div>
                     <div className={styles.final_text}>
                         {`증거 포인트: ${storyCluePoint}점\n`}
