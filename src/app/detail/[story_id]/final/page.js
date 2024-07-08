@@ -12,10 +12,10 @@ export default function Final() {
     const pathname = usePathname();
     const storyId = pathname.split("/")[2];
 
-    const level = window.localStorage.getItem("userLevel");
+    const level = parseInt(window.localStorage.getItem("userLevel"));
     const userName = window.localStorage.getItem("userName");
     const storyTitle = window.localStorage.getItem("storyTitle");
-    const isArrest = window.localStorage.getItem("isArrest");
+    const isArrest = window.localStorage.getItem("isArrest") === "true" ? true : false;
 
     const [totalCluePoint, setTotalCluePoint] = useState(0);
     const [totalDetectPoint, setTotalDetectPoint] = useState(0);

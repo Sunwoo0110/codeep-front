@@ -81,7 +81,7 @@ export default function Detail() {
         const getEpisode = async () => {
             const res = await axios.post('http://localhost:8000/episodes/episode_order', {
                 story_id: storyId,
-                level: window.localStorage.getItem("userLevel"),
+                level: parseInt(window.localStorage.getItem("userLevel")),
                 order: episodeOrder
             });
     

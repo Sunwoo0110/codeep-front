@@ -16,7 +16,7 @@ export default function ClueList() {
 
     const storyId = window.localStorage.getItem("storyId");
     const storyTitle = window.localStorage.getItem("storyTitle");
-    const level = window.localStorage.getItem("userLevel");
+    const level = parseInt(window.localStorage.getItem("userLevel"));
     const userName = window.localStorage.getItem("userName");
 
     const [clueList, setClueList] = useState([]);

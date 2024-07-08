@@ -34,7 +34,7 @@ export default function Reasoning() {
     const episodeOrder = pathname.split("/")[3];
     const chatContainerRef = useRef(null);
 
-    const level = window.localStorage.getItem("userLevel");
+    const level = parseInt(window.localStorage.getItem("userLevel"));
     const userName = window.localStorage.getItem("userName");
 
     const handleKeyPress = (e) => {

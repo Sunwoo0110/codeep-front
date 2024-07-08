@@ -14,7 +14,7 @@ export default function Clue() {
     const [subtitle, setSubTitle] = useState('');
     const [hintTitle, setHintTitle] = useState(window.localStorage.getItem("hintTitle") ? window.localStorage.getItem("hintTitle") : '');
     const [orderTitle, setOrderTitle] = useState('');
-    const [ruleTitle, setRuleTitle] = useState('단서 당 기본 점수: 3점 | 힌트 사용 시: -2점 | 단서 확인 시: 0점');
+    const [ruleTitle, setRuleTitle] = useState('단서 당 기본 점수: 3점 | 힌트 사용 시: 1점 | 단서 확인 시: 0점');
 
     const [clueButton, setClueButton] = useState('정답 확인하기');
     const [nextButton, setNextButton] = useState('다음 에피소드로 이동하기');
@@ -22,7 +22,7 @@ export default function Clue() {
 
     const [isLastClue, setIsLastClue] = useState(false);
     const [isDisabled, setIsDisabled] = useState(false);
-    const [isHint, setIsHint] = useState(window.localStorage.getItem("isHint") ? window.localStorage.getItem("isHint") : false);
+    const [isHint, setIsHint] = useState(window.localStorage.getItem("isHint") === "true" ? true : false);
     const [isClue, setIsClue] = useState(false);
     
     const [episodeId, setEpisodeId] = useState(1);
@@ -39,7 +39,7 @@ export default function Clue() {
 
     const [clueNum, setClueNum] = useState(10);
     const [clueInput, setClueInput] = useState('');
-    const [currentClueNum, setCurrentClueNum] = useState(window.localStorage.getItem("currentClueNum") ? window.localStorage.getItem("currentClueNum") : 1);
+    const [currentClueNum, setCurrentClueNum] = useState(window.localStorage.getItem("currentClueNum") ? parseInt(window.localStorage.getItem("currentClueNum")) : 1);
     const [cluePoint, setCluePoint] = useState(0); 
     const [clueList, setClueList] = useState([]);
 
@@ -47,7 +47,7 @@ export default function Clue() {
     const storyId = pathname.split("/")[2];
     const episodeOrder = pathname.split("/")[3];
 
-    const level = window.localStorage.getItem("userLevel");
+    const level = parseInt(window.localStorage.getItem("userLevel"));
     const userName = window.localStorage.getItem("userName");
 
     const handleKeyPress = (e) => {
@@ -79,6 +79,7 @@ export default function Clue() {
     }
 
     const addPoint = async (hint) => {
+        console.log("hint", hint);
         const res = await axios.post('http://localhost:8000/points/add_clue_point', {
             story_id: storyId,
             name: userName,
@@ -95,7 +96,7 @@ export default function Clue() {
         const getEpisode = async () => {
             const res = await axios.post('http://localhost:8000/episodes/episode_order', {
                 story_id: storyId,
-                level: window.localStorage.getItem("userLevel"),
+                level: parseInt(window.localStorage.getItem("userLevel")),
                 order: episodeOrder
             });
     
@@ -177,7 +178,7 @@ export default function Clue() {
     
 
     const clueClick = async () => {
-        const isConfirmed = confirm("단서를 확인하시겠습니까?\n단서 확인 시 2점이 차감됩니다.");
+        const isConfirmed = confirm("단서를 확인하시겠습니까?\n단서 확인 시 점수를 획득하지 못합니다.");
         if(isConfirmed) {
             const res = await axios.post('http://localhost:8000/clues/check_clue', {
                 episode_id: episodeId,
@@ -196,8 +197,6 @@ export default function Clue() {
                 addPoint(2);
                 await getClueList();
                 
-                // 유저 수집 단서 추가
-                setCurrentClueNum(currentClueNum + 1);
                 // TODO: 단서 추가
                 if (currentClueNum === clueNum) {
                     setHintTitle("축하합니다! 모든 단서를 찾으셨습니다.\n 다음 에피소드로 이동합니다.");
@@ -207,6 +206,7 @@ export default function Clue() {
                     // 단서 리스트에 추가
                     setHintTitle(`단서를 추가하셨습니다!`);
                 }
+                setCurrentClueNum(currentClueNum + 1);
                 setClueInput('')
                 setIsHint(false);
             }
@@ -223,14 +223,28 @@ export default function Clue() {
         if (res.data.result === "success"){
             console.log("hint", isHint)
             if (!isHint && !isClue) {
+                console.log("hint", isHint)
+                setClueList([...clueList, {
+                    name: res.data.clue.name,
+                    description: res.data.clue.description,
+                    img: res.data.clue.img,
+                    point: 3
+                }]);
                 addPoint(0);
             } else if (isHint) {
+                console.log("hint", isHint)
+                setClueList([...clueList, {
+                    name: res.data.clue.name,
+                    description: res.data.clue.description,
+                    img: res.data.clue.img,
+                    point: 1
+                }]);
                 addPoint(1);
             }
-            setCurrentClueNum(currentClueNum + 1);
             setIsHint(false);
+            await getClueList();
 
-            if (currentClueNum-1 === clueNum) {
+            if (currentClueNum === clueNum) {
                 setHintTitle("축하합니다! 모든 단서를 찾으셨습니다.\n 다음 에피소드로 이동합니다.");
             }
             // 다음 단서
@@ -238,6 +252,8 @@ export default function Clue() {
                 // 단서 리스트에 추가
                 setHintTitle(`단서 발견에 성공하셨습니다!\n단서를 추가합니다.`);
             }
+
+            setCurrentClueNum(currentClueNum + 1);
         }
         else if (res.data.result === "wrong") {
             setHintTitle(`올바르지 않은 단서입니다. 다시 입력해주세요.\n에피소드에 나타난 단어로 정확히 입력해주세요.`);
@@ -261,6 +277,8 @@ export default function Clue() {
 
     useEffect(() => {
         getClueList();
+        // console.log("currentClueNum", currentClueNum)
+        // console.log("clueNum", clueNum)
         if (currentClueNum > clueNum) {
             setIsLastClue(true);
             setSubTitle('모든 증거 수집이 완료되었습니다.');
