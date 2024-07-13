@@ -97,6 +97,10 @@ export default function Final() {
         return `${year}.${month}.${day} ${hours}:${minutes}`;
     }
 
+    const clickTest = () => {
+        window.location.href = 'https://forms.gle/Uj7bbQi2FnVjCdZu9';
+    }
+
     useEffect(() => {
         const getStory = async () => {   
             const res = await axios.get(`http://localhost:8000/stories/info/${window.localStorage.getItem("userAge")}`)
@@ -170,6 +174,8 @@ export default function Final() {
             <Header />
             <div className={styles.final_container}>
                 <div className={styles.final_title}>Final Result</div>
+                <div className={styles.final_test_button}
+                onClick={clickTest}>설문 조사 참여하고 상품 받기</div>
                 <div className={styles.final_result_container}>
                     <div className={styles.final_top}>
                         <div className={styles.final_subtitle}>
