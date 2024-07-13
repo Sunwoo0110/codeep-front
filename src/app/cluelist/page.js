@@ -14,14 +14,24 @@ export default function ClueList() {
     const [title, setTitle] = useState("수집된 단서 목록");
     const [cluePoint, setCluePoint] = useState(0);
 
-    const storyId = window.localStorage.getItem("storyId");
-    const storyTitle = window.localStorage.getItem("storyTitle");
-    const level = parseInt(window.localStorage.getItem("userLevel"));
-    const userName = window.localStorage.getItem("userName");
+    const [storyId, setStoryId] = useState("");
+    const [storyTitle, setStoryTitle] = useState("");
+    const [level, setLevel] = useState(0);
+    const [userName, setUserName] = useState("");
+
+    // const storyId = window.localStorage.getItem("storyId");
+    // const storyTitle = window.localStorage.getItem("storyTitle");
+    // const level = parseInt(window.localStorage.getItem("userLevel"));
+    // const userName = window.localStorage.getItem("userName");
 
     const [clueList, setClueList] = useState([]);
 
     useEffect(() => {
+
+        setStoryId(window.localStorage.getItem("storyId"))
+        setStoryTitle(window.localStorage.getItem("storyTitle"))
+        setLevel(parseInt(window.localStorage.getItem("userLevel")))
+        setUserName(window.localStorage.getItem("userName"))
 
         const getClueList = async () => {
             // console.log(storyId);
