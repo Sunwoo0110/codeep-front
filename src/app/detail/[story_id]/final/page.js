@@ -143,7 +143,7 @@ export default function Final() {
                         {`${(isArrest === true) ? "범인 검거 성공" : "범인 검거 실패"}`}
                     </div>
                     <div className={styles.final_text}>
-                        {`증거 포인트: ${storyCluePoint}점\n`}
+                        {`단서 포인트: ${storyCluePoint}점\n`}
                         {`추리 포인트: ${storyDetectPoint}점\n`}
                         {`플레이 시간: ${totalDetectTime.split(":")[0]}분 ${totalDetectTime.split(":")[1]}초\n`}
                     </div>
@@ -157,7 +157,7 @@ export default function Final() {
                         {`범인 검거율: ${(completeNum === 0) ? 0 : ((arrestNum / completeNum) * 100).toFixed(2)}%`}
                     </div>
                     <div className={styles.final_text}>
-                        {`전체 증거 포인트: ${totalCluePoint}점\n`}
+                        {`전체 단서 포인트: ${totalCluePoint}점\n`}
                         {`전체 추리 포인트: ${totalDetectPoint}점\n\n`}
                         {`검거 성공 횟수: ${arrestNum}번\n`}
                         {`스토리 클리어 횟수: ${completeNum}번\n`}

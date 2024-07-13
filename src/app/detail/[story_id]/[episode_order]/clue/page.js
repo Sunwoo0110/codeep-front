@@ -4,9 +4,10 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from 'next/navigation';
 import Header from "../../../../_components/common/_header";
+import Scoreheader from "@/app/_components/common/_scoreheader";
 import Cluebox from "@/app/_components/cluelist/_cluebox";
+import Hintmodal from "@/app/_components/detail/_hintmodal"
 import styles from "../../../../../styles/detail/Clue.module.css";
-import { getRequestMeta } from "next/dist/server/request-meta";
 
 export default function Clue() {
 
@@ -42,6 +43,9 @@ export default function Clue() {
     const [currentClueNum, setCurrentClueNum] = useState(window.localStorage.getItem("currentClueNum") ? parseInt(window.localStorage.getItem("currentClueNum")) : 1);
     const [cluePoint, setCluePoint] = useState(0); 
     const [clueList, setClueList] = useState([]);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [detectPoint, setDetectPoint] = useState(0);
 
     const pathname = usePathname();
     const storyId = pathname.split("/")[2];
@@ -91,6 +95,26 @@ export default function Clue() {
         console.log(res.data);
     }
 
+    const getPoint = async () => {
+        const clue_res = await axios.post(`http://localhost:8000/points/all_clue_point`, {
+            story_id: storyId,
+            name: userName,
+            level: level,
+        })
+        if (clue_res.data.result === "success") {
+            setCluePoint(clue_res.data.point);
+        }
+
+        const detect_res = await axios.post(`http://localhost:8000/points/all_detect_point`, {
+            story_id: storyId,
+            name: userName,
+            level: level,
+        })
+        if (detect_res.data.result === "success") {
+            setDetectPoint(detect_res.data.total_point);
+        }
+    }
+
     useEffect(() => {
 
         const getEpisode = async () => {
@@ -126,6 +150,7 @@ export default function Clue() {
         getEpisode();
         getClueList();
         getCluePoint();
+        getPoint();
     }, [])
 
     useEffect(() => {
@@ -155,7 +180,13 @@ export default function Clue() {
         if (currentClueNum <= clueNum) {
             setOrderTitle(`${currentClueNum}번째 단서를 입력해주세요.`);
         }
+        getPoint();
     }, [currentClueNum])
+
+    const handleCloseModal = () => {
+        console.log("close")
+        setIsModalOpen(false);
+    };
     
     const hintClick = async () => {
         const isConfirmed = confirm("힌트를 사용하시겠습니까?\n힌트 사용 시 1점이 차감됩니다.");
@@ -172,6 +203,8 @@ export default function Clue() {
                 const index = detailList.findIndex(item => item._id === res.data.clue.detail_id);
                 setHintTitle(`단서 위치: ${index+1}번째 단락`);
                 setIsHint(true);
+                // 힌트 모달창
+                setIsModalOpen(true)
             }
         }
     }
@@ -299,6 +332,7 @@ export default function Clue() {
     return (
         <div className={styles.container}>
             <Header />
+            <Scoreheader cluePoint={cluePoint} detectPoint={detectPoint}/>
             <div className={styles.clue_container}>
                 <div className={styles.main_title}>
                     {maintitle}
@@ -355,6 +389,10 @@ export default function Clue() {
                 </div>
 
             </div>
+
+        {isModalOpen && (
+            <Hintmodal title={`${currentClueNum}번째 단서`} text={hintTitle} onClick={handleCloseModal}/>
+        )}
         </div>
     )
 }

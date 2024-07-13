@@ -8,6 +8,7 @@ import Header from "../../../../_components/common/_header";
 import Leftchat from "../../../../_components/detail/_leftchat";
 import Rightchat from "../../../../_components/detail/_rightchat";
 import Arrest from "../../../../_components/detail/_arrest";
+import Scoreheader from "@/app/_components/common/_scoreheader";
 
 export default function Reasoning() {
 
@@ -25,6 +26,9 @@ export default function Reasoning() {
     const [chats, setChats] = useState([]);
     const [point, setPoint] = useState(0);
     const [totalPoint, setTotalPoint] = useState(0);
+    const [cluePoint, setCluePoint] = useState(0); 
+    const [detectPoint, setDetectPoint] = useState(0);
+
     const [arrestTitle, setArrestTitle] = useState('');
     const [arrestContent, setArrestContent] = useState('');
     const [arrestImg, setArrestImg] = useState('');
@@ -122,6 +126,26 @@ export default function Reasoning() {
         return 0;
     }
 
+    const getScorePoint = async () => {
+        const clue_res = await axios.post(`http://localhost:8000/points/all_clue_point`, {
+            story_id: storyId,
+            name: userName,
+            level: level,
+        })
+        if (clue_res.data.result === "success") {
+            setCluePoint(clue_res.data.point);
+        }
+
+        const detect_res = await axios.post(`http://localhost:8000/points/all_detect_point`, {
+            story_id: storyId,
+            name: userName,
+            level: level,
+        })
+        if (detect_res.data.result === "success") {
+            setDetectPoint(detect_res.data.total_point);
+        }
+    }
+
     const createChat = async (input, point) => {
 
         if (input === "") {
@@ -208,18 +232,21 @@ export default function Reasoning() {
         }
         getChats();
         getTotalPoint();
+        getScorePoint();
     }, []);
 
     useEffect(() => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
         }
+        getScorePoint();
     }, [chats]);
 
 
     return (
         <div className={styles.container}>
             <Header />
+            <Scoreheader cluePoint={cluePoint} detectPoint={detectPoint}/>
             <div className={styles.reasoning_container}>
                 <div className={styles.main_title}>
                     {maintitle}

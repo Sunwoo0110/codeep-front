@@ -1,8 +1,8 @@
 'use client';
 
 import styles from "./page.module.css";
-// import Main from "./main/page";
-import Story from "./story/page";
+import Main from "./main/page";
+// import Story from "./story/page";
 import { useState, useEffect } from "react"
 
 export default function Home() {
@@ -26,7 +26,8 @@ export default function Home() {
     <>
     {isMobile && 
       <div className={styles.container}>
-        <Story />
+        {/* <Story /> */}
+        <Main />
       </div>
     }
     </>

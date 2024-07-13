@@ -5,7 +5,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 import Header from "../_components/common/_header";
-import Storybox from "../_components/story/_storybox";
+import Storybox from "../_components/story/_storybox.js";
 import { Stick } from "next/font/google";
 
 export default function Story() {

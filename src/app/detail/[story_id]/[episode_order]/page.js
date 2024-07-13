@@ -7,10 +7,11 @@ import { usePathname, useRouter } from 'next/navigation';
 import styles from "@/styles/detail/Detail.module.css"
 import Header from "@/app/_components/common/_header";
 import Detailbox from "@/app/_components/detail/_detailbox";
+import Scoreheader from "@/app/_components/common/_scoreheader";
 // import Selection from "@/app/_components/detail/_selection";
 import Titlebox from "@/app/_components/detail/_titlebox";
 import Episodebox from "@/app/_components/detail/_episodebox";
-// import Evidence from "@/app/_components/detail/_evidence";
+
 
 export default function Detail() {
 
@@ -36,8 +37,15 @@ export default function Detail() {
     const [clueNum, setClueNum] = useState(0);
     const [title, setTitle] = useState("");
 
+    const [cluePoint, setCluePoint] = useState(0); 
+    const [detectPoint, setDetectPoint] = useState(0);
+
     const [isLastEpisode, setIsLastEpisode] = useState(false);
     const [isAtBottom, setIsAtBottom] = useState(false);
+
+    const level = parseInt(window.localStorage.getItem("userLevel"));
+    const userName = window.localStorage.getItem("userName");
+
     const containerRef = useRef(null);
 
     const goNextEpsiode = () => {
@@ -56,6 +64,27 @@ export default function Detail() {
     const goFinal = () => {
         window.location.href = `/detail/${storyId}/final`;
     }
+
+    const getPoint = async () => {
+        const clue_res = await axios.post(`http://localhost:8000/points/all_clue_point`, {
+            story_id: storyId,
+            name: userName,
+            level: level,
+        })
+        if (clue_res.data.result === "success") {
+            setCluePoint(clue_res.data.point);
+        }
+
+        const detect_res = await axios.post(`http://localhost:8000/points/all_detect_point`, {
+            story_id: storyId,
+            name: userName,
+            level: level,
+        })
+        if (detect_res.data.result === "success") {
+            setDetectPoint(detect_res.data.total_point);
+        }
+    }
+
     
     useEffect(() => {
         const handleScroll = () => {
@@ -95,6 +124,7 @@ export default function Detail() {
             }
         }
         getEpisode();
+        getPoint();
     }, [])
 
     useEffect(() => {
@@ -130,6 +160,7 @@ export default function Detail() {
     return(
         <div className={styles.container}>
             <Header />
+            <Scoreheader cluePoint={cluePoint} detectPoint={detectPoint}/>
             <Titlebox title={`Episode ${episodeOrder}: ${title}`}/>
             <div className={styles.detail_container}>
                 <div className={styles.detail_top} ref={containerRef}>

@@ -1,0 +1,21 @@
+.scoreheader_container {
+    /* height: 60px; */
+    width: 100%;
+    background-color: #e9ecef;
+    border-bottom: 1px solid #C5D4EB;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: space-between;
+    padding: 5px 15px;
+}
+
+.scoreheader_cluepoint {
+    font-size: 15px;
+    font-family: 'GmarketSansMedium';
+    font-weight: 700;
+    margin: 10px;
+    color: #5f5f5f;
+    white-space: pre-wrap;
+    text-align: center;
+}
