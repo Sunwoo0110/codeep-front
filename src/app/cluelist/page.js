@@ -27,7 +27,7 @@ export default function ClueList() {
             // console.log(storyId);
             // console.log(userName);
             // console.log(level);
-            const res = await axios.post(`http://localhost:8000/clues/get_user_clues`, {
+            const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/clues/get_user_clues`, {
                 story_id: storyId,
                 name: userName,
                 level: level
@@ -49,7 +49,7 @@ export default function ClueList() {
         }
 
         const getCluePoint = async () => {
-            const res = await axios.post(`http://localhost:8000/points/all_clue_point`, {
+            const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_clue_point`, {
                 story_id: storyId,
                 name: userName,
                 level: level

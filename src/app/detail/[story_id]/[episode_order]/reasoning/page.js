@@ -58,7 +58,7 @@ export default function Reasoning() {
 
     const updateStat = async () => {
         const is_arrest = (arrestTitle === "범인 검거 성공") ? 1 : 0;
-        const res = await axios.post(`http://localhost:8000/stats/update_stat`, {
+        const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/stats/update_stat`, {
             story_id: storyId,
             name: userName,
             level: level,
@@ -86,7 +86,7 @@ export default function Reasoning() {
             return 0;
         }
         
-        const res = await axios.post(`http://localhost:8000/points/detect_point`, {
+        const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/detect_point`, {
             story_id: storyId,
             name: userName,
             level: level,
@@ -127,7 +127,7 @@ export default function Reasoning() {
     }
 
     const getScorePoint = async () => {
-        const clue_res = await axios.post(`http://localhost:8000/points/all_clue_point`, {
+        const clue_res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_clue_point`, {
             story_id: storyId,
             name: userName,
             level: level,
@@ -136,7 +136,7 @@ export default function Reasoning() {
             setCluePoint(clue_res.data.point);
         }
 
-        const detect_res = await axios.post(`http://localhost:8000/points/all_detect_point`, {
+        const detect_res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_detect_point`, {
             story_id: storyId,
             name: userName,
             level: level,
@@ -152,7 +152,7 @@ export default function Reasoning() {
             alert("메세지를 입력해주세요.");
         }
         else {
-            const res = await axios.post(`http://localhost:8000/chattings/create_chat`, {
+            const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/chattings/create_chat`, {
                 story_id: storyId,
                 name: userName,
                 level: level,
@@ -180,7 +180,7 @@ export default function Reasoning() {
 
     useEffect( () => {
         const getChats = async () => {
-            const res = await axios.post(`http://localhost:8000/chattings/get_all_chat`, {
+            const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/chattings/get_all_chat`, {
                 story_id: storyId,
                 name: userName,
                 level: level
@@ -199,7 +199,7 @@ export default function Reasoning() {
             } else {
                 if (chats.length === 0) {
                     setIsLoading(true);
-                    const res = await axios.post(`http://localhost:8000/chattings/create_chat`, {
+                    const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/chattings/create_chat`, {
                         story_id: storyId,
                         name: userName,
                         level: level,
@@ -220,7 +220,7 @@ export default function Reasoning() {
         }
 
         const getTotalPoint = async () => {
-            const res = await axios.post(`http://localhost:8000/points/all_detect_point`, {
+            const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_detect_point`, {
                 story_id: storyId,
                 name: userName,
                 level: level
