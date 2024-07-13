@@ -62,7 +62,7 @@ export default function Clue() {
     };
 
     const getClueList = async () => {
-        const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/clues/get_user_clues`, {
+        const res = await axios.post(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/clues/get_user_clues`, {
             story_id: storyId,
             name: userName,
             level: level
@@ -84,7 +84,7 @@ export default function Clue() {
 
     const addPoint = async (hint) => {
         console.log("hint", hint);
-        const res = await axios.post('ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/add_clue_point', {
+        const res = await axios.post('http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/add_clue_point', {
             story_id: storyId,
             name: userName,
             level: level,
@@ -96,7 +96,7 @@ export default function Clue() {
     }
 
     const getPoint = async () => {
-        const clue_res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_clue_point`, {
+        const clue_res = await axios.post(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_clue_point`, {
             story_id: storyId,
             name: userName,
             level: level,
@@ -105,7 +105,7 @@ export default function Clue() {
             setCluePoint(clue_res.data.point);
         }
 
-        const detect_res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_detect_point`, {
+        const detect_res = await axios.post(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_detect_point`, {
             story_id: storyId,
             name: userName,
             level: level,
@@ -118,7 +118,7 @@ export default function Clue() {
     useEffect(() => {
 
         const getEpisode = async () => {
-            const res = await axios.post('ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/episodes/episode_order', {
+            const res = await axios.post('http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/episodes/episode_order', {
                 story_id: storyId,
                 level: parseInt(window.localStorage.getItem("userLevel")),
                 order: episodeOrder
@@ -136,7 +136,7 @@ export default function Clue() {
         }
 
         const getCluePoint = async () => {
-            const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_clue_point`, {
+            const res = await axios.post(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_clue_point`, {
                 story_id: storyId,
                 name: userName,
                 level: level
@@ -156,7 +156,7 @@ export default function Clue() {
     useEffect(() => {
         const getDetail = async () => {
             try {
-                const res = await axios.post('ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/details/get_all_detail', {
+                const res = await axios.post('http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/details/get_all_detail', {
                     episode_id: episodeId,
                 });
         
@@ -191,7 +191,7 @@ export default function Clue() {
     const hintClick = async () => {
         const isConfirmed = confirm("힌트를 사용하시겠습니까?\n힌트 사용 시 1점이 차감됩니다.");
         if(isConfirmed) {
-            const res = await axios.post('ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/clues/check_clue', {
+            const res = await axios.post('http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/clues/check_clue', {
                 episode_id: episodeId,
                 name: clueInput,
                 order: currentClueNum
@@ -213,7 +213,7 @@ export default function Clue() {
     const clueClick = async () => {
         const isConfirmed = confirm("단서를 확인하시겠습니까?\n단서 확인 시 점수를 획득하지 못합니다.");
         if(isConfirmed) {
-            const res = await axios.post('ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/clues/check_clue', {
+            const res = await axios.post('http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/clues/check_clue', {
                 episode_id: episodeId,
                 name: clueInput,
                 order: currentClueNum
@@ -247,7 +247,7 @@ export default function Clue() {
     }
 
     const findClick = async () => {
-        const res = await axios.post('ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/clues/check_clue', {
+        const res = await axios.post('http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/clues/check_clue', {
             episode_id: episodeId,
             name: clueInput,
             order: currentClueNum

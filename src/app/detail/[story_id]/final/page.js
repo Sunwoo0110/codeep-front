@@ -40,7 +40,7 @@ export default function Final() {
     }
 
     const startStats = async () => {
-        const res = await axios.post("ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/stats/ep1_start", {
+        const res = await axios.post("http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/stats/ep1_start", {
             name: userName,
         })
         if (res.data.result === "success"){
@@ -64,7 +64,7 @@ export default function Final() {
     }
 
     const getRanking = async () => {
-        const story_res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/ranks/story_rank`, {
+        const story_res = await axios.post(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/ranks/story_rank`, {
             story_id: storyId,
             name: userName,
             level: level
@@ -77,7 +77,7 @@ export default function Final() {
             alert("랭킹 불러오기에 실패하였습니다.")
         }
 
-        const total_res = await axios.get(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/ranks/total_rank/${userName}`)
+        const total_res = await axios.get(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/ranks/total_rank/${userName}`)
         if (total_res.data.result === "success") {
             setTotalRanking(total_res.data.rank.rank_list);
             setTotalRank(total_res.data.rank.target.rank);
@@ -103,7 +103,7 @@ export default function Final() {
 
     useEffect(() => {
         const getStory = async () => {   
-            const res = await axios.get(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/stories/info/${window.localStorage.getItem("userAge")}`)
+            const res = await axios.get(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/stories/info/${window.localStorage.getItem("userAge")}`)
     
             if (res.data.result === "success"){
                 console.log(res.data.stories);
@@ -121,7 +121,7 @@ export default function Final() {
     useEffect(() => {
 
         const getStats = async () => {
-            const res = await axios.get(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/stats/get_stat/${userName}`)
+            const res = await axios.get(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/stats/get_stat/${userName}`)
 
             if (res.data.result === "success") {
                 setTotalCluePoint(res.data.stat.clue_point);
@@ -135,7 +135,7 @@ export default function Final() {
         }
 
         const getStoryCluePoint = async () => {
-            const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_clue_point`, {
+            const res = await axios.post(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_clue_point`, {
                 story_id: storyId,
                 name: userName,
                 level: level
@@ -149,7 +149,7 @@ export default function Final() {
         }
 
         const getStoryDetectPoint = async () => {
-            const res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_detect_point`, {
+            const res = await axios.post(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_detect_point`, {
                 story_id: storyId,
                 name: userName,
                 level: level

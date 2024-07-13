@@ -66,7 +66,7 @@ export default function Detail() {
     }
 
     const getPoint = async () => {
-        const clue_res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_clue_point`, {
+        const clue_res = await axios.post(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_clue_point`, {
             story_id: storyId,
             name: userName,
             level: level,
@@ -75,7 +75,7 @@ export default function Detail() {
             setCluePoint(clue_res.data.point);
         }
 
-        const detect_res = await axios.post(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_detect_point`, {
+        const detect_res = await axios.post(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/all_detect_point`, {
             story_id: storyId,
             name: userName,
             level: level,
@@ -108,7 +108,7 @@ export default function Detail() {
 
     useEffect(() => {
         const getEpisode = async () => {
-            const res = await axios.post('ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/episodes/episode_order', {
+            const res = await axios.post('http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/episodes/episode_order', {
                 story_id: storyId,
                 level: parseInt(window.localStorage.getItem("userLevel")),
                 order: episodeOrder
@@ -132,7 +132,7 @@ export default function Detail() {
         // console.log(window.localStorage.getItem("userId"))
         const getDetail = async () => {
             try {
-                const res = await axios.post('ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/details/get_all_detail', {
+                const res = await axios.post('http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/details/get_all_detail', {
                     episode_id: episodeId,
                 });
         

@@ -24,7 +24,7 @@ export default function Story() {
     ];
 
     const register = async () => {
-        const res = await axios.post("http://127.0.0.1:8000/users/register", {
+        const res = await axios.post("http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/users/register", {
                 name: name,
             }
         )
@@ -38,7 +38,7 @@ export default function Story() {
     }
 
     const startStats = async () => {
-        const res = await axios.post("ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/stats/ep1_start", {
+        const res = await axios.post("http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/stats/ep1_start", {
             name: name,
         })
         if (res.data.result === "success"){
@@ -50,13 +50,13 @@ export default function Story() {
     }
 
     const remove = async (storyId) => {
-        await axios.post("ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/chattings/remove_all_chat", {
+        await axios.post("http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/chattings/remove_all_chat", {
             story_id: storyId,
             name: name,
             level: selectedOption.level
         })
 
-        await axios.post("ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/remove_point", {
+        await axios.post("http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/points/remove_point", {
             story_id: storyId,
             name: name,
             level: selectedOption.level
@@ -108,7 +108,7 @@ export default function Story() {
 
     useEffect(() => {
         const getStory = async () => {   
-            const res = await axios.get(`ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/stories/info/${window.localStorage.getItem("userAge")}`)
+            const res = await axios.get(`http://ec2-54-180-131-231.ap-northeast-2.compute.amazonaws.com/stories/info/${window.localStorage.getItem("userAge")}`)
     
             if (res.data.result === "success"){
                 console.log(res.data.stories);
